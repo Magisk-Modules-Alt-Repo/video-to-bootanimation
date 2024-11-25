@@ -19,7 +19,7 @@ If you delete the `cfg` file or leave it empty, the module will automatically de
   [tell here](https://t.me/ximistuffschat)
 
 # Alternative Approach
-- You can use [this script](https://github.com/rhythmcache/BootAnimation-Creator-Script) to convert videos into a Bootanimation magisk module , which can be flashed directly in magisk. you don't need to create any cfg etc
+- You can use [this script](https://github.com/rhythmcache/Video-to-BootAnimation-Creator-Script/tree/main) to convert videos into a Bootanimation magisk module , which can be flashed directly in magisk. you don't need to create any cfg etc
 
 ## Download
 
