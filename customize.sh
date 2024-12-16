@@ -177,6 +177,6 @@ rm -rf "$TMP_DIR"
 
 # Set permissions for the module
 set_perm_recursive $MODPATH/system 0 0 0755 0644
-ui_print "[ *] Done"
+ui_print "[*] Done"
 ui_print " "
 
