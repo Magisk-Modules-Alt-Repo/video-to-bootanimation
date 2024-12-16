@@ -8,7 +8,7 @@ For example, entering `720 1280 25` in cfg file will set the boot animation reso
 If you delete the `cfg` file or leave it empty, the module will automatically detect your screen resolution and configure itself accordingly while running. The default FPS is fixed and will be 30 , but as i said you can configure it by creating a cfg file.
 
 ## Bugs
-- Might not work on MIUI/HyperOS. (never tested)
+- ~~Might not work on MIUI/HyperOS. (never tested)~~
 - Samsung uses a .QMG format for boot animations, meaning this animation also won't work on your Samsung device.
 - Might not work on devices of non-arm64 architecture , to fix you have to put `ffmpeg` and `zip` binary of respective architecture to the module"s bin folder. (you have to find the binary by yourself)
 - Script doesn’t terminate : KernelSU may show the status as "flashing" even though the flashing process is complete. As soon as you see `done` in the output, press the back button.
