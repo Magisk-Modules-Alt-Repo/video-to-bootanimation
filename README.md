@@ -27,3 +27,4 @@ If you delete the `cfg` file or leave it empty, the module will automatically de
 
 ---
 [![Telegram](https://img.shields.io/badge/Telegram-Join%20Chat-blue?style=flat-square&logo=telegram)](https://t.me/ximistuffschat)
+![Downloads](https://img.shields.io/github/downloads/Magisk-Modules-Alt-Repo/video-to-bootanimation/total.svg)
