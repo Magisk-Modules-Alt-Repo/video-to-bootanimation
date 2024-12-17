@@ -44,7 +44,5 @@ If you delete the `cfg` file or leave it empty, the module will automatically de
 
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
-    ---
 [![Telegram](https://img.shields.io/badge/Telegram-Join%20Chat-blue?style=flat-square&logo=telegram)](https://t.me/ximistuffschat)
 ![Downloads](https://img.shields.io/github/downloads/Magisk-Modules-Alt-Repo/video-to-bootanimation/total.svg)
