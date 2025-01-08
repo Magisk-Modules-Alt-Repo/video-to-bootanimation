@@ -1,0 +1,137 @@
+#!/system/bin/bash
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+YELLOW='\033[1;33m'
+NC='\033[0m'
+if ! command -v ffmpeg &> /dev/null; then
+    echo "ffmpeg not found"
+fi
+
+if ! command -v busybox &> /dev/null; then
+    echo "busybox not found"
+fi
+
+if [ $# -eq 2 ]; then
+    zip_path="$1"
+    output_path="$2"
+elif [ $# -eq 0 ]; then
+    echo -e "${GREEN}Enter bootanimation zip path (e.g., /path/to/bootanimation.zip):${NC}"
+    read zip_path
+    echo -e "${GREEN}Enter output video path (e.g., /path/to/output.mp4):${NC}"
+    read output_path
+else
+    echo "Usage: $0 [bootanimation_zip_path output_video_path]"
+    echo "Example: $0 /path/to/bootanimation.zip /path/to/output.mp4"
+    exit 1
+fi
+mkdir -p "/sdcard/temp"
+cd "/sdcard/temp"
+work_dir="$(pwd)"
+mkdir -p "$work_dir"
+extract_dir="$work_dir/extracted"
+frames_dir="$work_dir/frames"
+
+cleanup() {
+    rm -rf "$work_dir"
+}
+trap cleanup EXIT
+
+echo -e "${YELLOW}Extracting bootanimation.zip...${NC}"
+mkdir -p "$extract_dir"
+busybox unzip -o "$zip_path" -d "$extract_dir" > /dev/null || { echo -e "${RED}Failed to unzip bootanimation.zip${NC}"; exit 1; }
+desc_file="$extract_dir/desc.txt"
+
+if [[ -f "$desc_file" ]]; then
+    resolution=$(awk 'NR==1 {print $1 "x" $2}' "$desc_file")
+    fps=$(awk 'NR==1 {print $3}' "$desc_file")  
+    
+    if [[ -z "$resolution" || -z "$fps" ]]; then
+        echo -e "${RED}Error: Unable to extract resolution or frame rate from desc.txt.${NC}"
+        exit 1
+    fi
+    echo -e "${GREEN}Resolution: $resolution, FPS: $fps${NC}"
+else
+    echo -e "${RED}Error: desc.txt not found in bootanimation zip.${NC}"
+    exit 1
+fi
+
+echo -e "${YELLOW}Checking for audio...${NC}"
+audio_found=false
+part_videos=()
+for part_dir in "$extract_dir"/*/; do
+    if [[ -f "$part_dir/audio.wav" ]]; then
+        audio_found=true
+        echo -e "${GREEN}Found audio in $part_dir${NC}"
+        mkdir -p "$frames_dir"
+        part_frames_dir="$frames_dir/$(basename "$part_dir")"
+        mkdir -p "$part_frames_dir"
+        
+        # Copy frames
+        jpg_exists=$(find "$part_dir" -type f -iname "*.jpg" | wc -l)
+        png_exists=$(find "$part_dir" -type f -iname "*.png" | wc -l)
+        if [ "$png_exists" -gt 0 ]; then
+            extension="png"
+        elif [ "$jpg_exists" -gt 0 ]; then
+            extension="jpg"
+        else
+            echo -e "${RED}No valid frames (PNG or JPG) found in $part_dir. Skipping.${NC}"
+            continue
+        fi
+        
+        frame_counter=1
+        find "$part_dir" -type f -iname "*.$extension" | sort | while read -r frame; do
+            printf -v new_name "%05d.$extension" "$frame_counter"
+            cp "$frame" "$part_frames_dir/$new_name"
+            ((frame_counter++))
+        done
+        
+        # Generate part video
+        part_video="$work_dir/$(basename "$part_dir").mp4"
+        ffmpeg -y -framerate "$fps" -i "$part_frames_dir/%05d.$extension" -i "$part_dir/audio.wav" \
+            -shortest -c:v libx264 -pix_fmt yuv420p -s "$resolution" -c:a aac "$part_video" || {
+            echo -e "${RED}Failed to generate video for $part_dir.${NC}"
+            exit 1
+        }
+        part_videos+=("$part_video")
+    fi
+done
+
+if [ "$audio_found" = true ]; then
+    echo -e "${YELLOW}Merging part videos...${NC}"
+    concat_file="$work_dir/concat_list.txt"
+    for video in "${part_videos[@]}"; do
+        echo "file '$video'" >> "$concat_file"
+    done
+    ffmpeg -y -f concat -safe 0 -i "$concat_file" -c copy "$output_path" || {
+        echo -e "${RED}Failed to merge videos.${NC}"
+        exit 1
+    }
+    echo -e "${GREEN}Video successfully generated  at $output_path.${NC}"
+else
+    echo -e "${YELLOW}No audio found in bootanimation ?...${NC}"
+    # Original frame processing logic
+    mkdir -p "$frames_dir"
+    frame_counter=1
+    jpg_exists=$(find "$extract_dir" -type f -iname "*.jpg" | wc -l)
+    png_exists=$(find "$extract_dir" -type f -iname "*.png" | wc -l)
+    if [ "$png_exists" -gt 0 ]; then
+        extension="png"
+    elif [ "$jpg_exists" -gt 0 ]; then
+        extension="jpg"
+    else
+        echo -e "${RED}No valid frames (PNG or JPG) found. Exiting.${NC}"
+        exit 1
+    fi
+    find "$extract_dir" -type f -iname "*.$extension" | sort | while read -r frame; do
+        printf -v new_name "%05d.$extension" "$frame_counter"
+        cp "$frame" "$frames_dir/$new_name"
+        ((frame_counter++))
+    done
+
+    echo -e "${YELLOW}Generating video...${NC}"
+    if ! ffmpeg -y -framerate "$fps" -i "$frames_dir/%05d.$extension" -s "$resolution" -pix_fmt yuv420p "$output_path" 2>&1 | grep "frame"; then
+        echo -e "${RED}Failed to generate video.${NC}"
+        exit 1
+    fi
+    echo -e "${GREEN}Video successfully generated at $output_path.${NC}"
+fi
