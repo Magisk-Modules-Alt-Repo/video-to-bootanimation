@@ -243,11 +243,9 @@ echo -e "${BRIGHT_CYAN}==================================================== ${NC
 sleep 1
 # Clean up temporary files
 echo " => Removing Temporary Files "
-rm -rf "$TMP_DIR"
-rm -rf "$mod"
-echo -e "${GREEN} => Process Complete${NC}"
 cd "/sdcard"
 rm -rf "/sdcard/tmp"
+echo -e "${GREEN} => Process Complete${NC}"
 exit 0
 else
   echo "Error: Animation folder not found in $TMP_DIR/module."
