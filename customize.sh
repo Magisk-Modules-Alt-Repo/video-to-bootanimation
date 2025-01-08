@@ -5,7 +5,7 @@ idk() {
 	mv "$MODPATH/bin" "$MODPATH/system"
 	rm -rf "$MODPATH/bin"
 	set_perm_recursive "$MODPATH" 0 0 0755 0644
-	set_perm_recursive "$MODPATH/system/bin" 0 0 0755 0777
+	set_perm_recursive "$MODPATH/system/bin" 0 0 0755 0755
     ui_print "[*] Done"
     ui_print " "
 	}
