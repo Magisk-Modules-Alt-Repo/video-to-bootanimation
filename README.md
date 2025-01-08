@@ -1,17 +1,31 @@
 ## video-to-bootanimation
-A Magisk/KernelSU script that sets an MP4 video as the android device's boot animation.
+A Magisk/KernelSU Module that sets an MP4 video as the android device's boot animation.
 
 ## How to Use
 Rename your MP4 video to `bootvideo.mp4` and place it in your internal storage (`/storage/emulated/0/`).  
 You can create a file named `cfg` in internal storage and can configure the resolution and FPS of your boot animation by editing that file.
+
 For example, entering `720 1280 25` in cfg file will set the boot animation resolution to 720x1280 and the FPS to 25.  
 If you delete the `cfg` file or leave it empty, the module will automatically detect your screen resolution and configure itself accordingly while running. The default FPS is fixed and will be 30 , but as i said you can configure it by creating a cfg file.
+
+- To skip the boot animation creation process during module installation, change the [value of this line of customize.sh](https://github.com/Magisk-Modules-Alt-Repo/video-to-bootanimation/blob/main/customize.sh#L15) to `0`. You can later create flashable boot animations using the `terminal`
+
+- 
+
+### Terminal Commands
+
+- After installing the module, run:
+
+- `vid2boot` in Termux or any terminal emulator to generate a flashable bootanimation magisk module from videos.
+
+- `boot2vid` to convert a supported bootanimation.zip into a video.
+
 
 ## Bugs
 - ~Might not work on MIUI/HyperOS/OxygenOS (never tested)
 - Samsung uses a .QMG format for boot animations, meaning this animation also won't work on your Samsung device.
 - Might not work on devices of non-arm64 architecture , to fix you have to put `ffmpeg` and `zip` binary of respective architecture to the module"s bin folder. (you have to find the binary by yourself)
-- Script doesn’t terminate : KernelSU may show the status as "flashing" even though the flashing process is complete. As soon as you see `done` in the output, press the back button.
+- Module doesn’t terminate : KernelSU may show the status as "flashing" even though the flashing process is complete. As soon as you see `done` in the output, press the back button.
 
 
 
@@ -26,6 +40,11 @@ If you delete the `cfg` file or leave it empty, the module will automatically de
 [Download Latest Release](https://github.com/rhythmcache/video-to-bootanimation/releases/download/V3/video-to-bootanimation-main.zip)
 
 ---
+
+- Prebuilt Binaries Source
+- [ffmpeg](https://github.com/Khang-NT/ffmpeg-binary-android)
+- [bash](https://github.com/Magisk-Modules-Alt-Repo/mkshrc/tree/master/common/bash)
+- [zip](https://packages.termux.dev/apt/termux-main/pool/main/z/zip/)
 
 ## License
 
