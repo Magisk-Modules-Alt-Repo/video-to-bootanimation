@@ -17,7 +17,7 @@ If you delete the `cfg` file or leave it empty, the module will automatically de
 
 ### Terminal Commands
 
-- After installing the module, run:
+- After installing the module, run these commands with `root` permissions:
 
 - `vid2boot` in Termux or any terminal emulator to generate a flashable bootanimation magisk module from videos.
 
