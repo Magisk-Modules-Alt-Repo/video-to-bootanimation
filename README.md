@@ -10,7 +10,8 @@ If you delete the `cfg` file or leave it empty, the module will automatically de
 
 ---
 
-- To skip the boot animation creation process during module installation, change the [value of this line of customize.sh](https://github.com/Magisk-Modules-Alt-Repo/video-to-bootanimation/blob/main/customize.sh#L15) to `0`. You can later create flashable boot animations using the `terminal`
+- If you just want to install the module and don't want to create a bootanimation during the installation of module, unzip the module and change the [value of this line of customize.sh](https://github.com/Magisk-Modules-Alt-Repo/video-to-bootanimation/blob/main/customize.sh#L15) to `0`, this will skip the whole bootanimation creation process during installation of the module.
+- You can later create flashable boot animations using the `terminal`
 
 - 
 
