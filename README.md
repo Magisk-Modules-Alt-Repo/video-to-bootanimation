@@ -2,11 +2,13 @@
 A Magisk/KernelSU Module that sets an MP4 video as the android device's boot animation.
 
 ## How to Use
-Rename your MP4 video to `bootvideo.mp4` and place it in your internal storage (`/storage/emulated/0/`).  
+- Rename your MP4 video to `bootvideo.mp4` and place it in your internal storage (`/storage/emulated/0/`).  
 You can create a file named `cfg` in internal storage and can configure the resolution and FPS of your boot animation by editing that file.
 
-For example, entering `720 1280 25` in cfg file will set the boot animation resolution to 720x1280 and the FPS to 25.  
+- For example, entering `720 1280 25` in cfg file will set the boot animation resolution to 720x1280 and the FPS to 25.  
 If you delete the `cfg` file or leave it empty, the module will automatically detect your screen resolution and configure itself accordingly while running. The default FPS is fixed and will be 30 , but as i said you can configure it by creating a cfg file.
+
+---
 
 - To skip the boot animation creation process during module installation, change the [value of this line of customize.sh](https://github.com/Magisk-Modules-Alt-Repo/video-to-bootanimation/blob/main/customize.sh#L15) to `0`. You can later create flashable boot animations using the `terminal`
 
