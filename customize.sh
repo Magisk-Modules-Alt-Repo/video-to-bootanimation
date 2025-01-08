@@ -1,4 +1,26 @@
 #video2bootanimation by @rhythmcache
+
+idk() {
+	mkdir -p "$MODPATH/system/bin"
+	mv "$MODPATH/bin" "$MODPATH/system"
+	rm -rf "$MODPATH/bin"
+	set_perm_recursive "$MODPATH" 0 0 0755 0644
+	set_perm_recursive "$MODPATH/system/bin" 0 0 0755 0777
+    ui_print "[*] Done"
+    ui_print " "
+	}
+
+	
+# Control execution
+EXECUTE=1 # Set to 0 to install without creating bootanimation 
+if [ "$EXECUTE" -eq 0 ]; then
+  ui_print " => Installing Without Creating Bootanimation"
+  ui_print " => You Can Later Create Bootanimations by running 'vid2boot' in Terminal"
+  idk
+  exit 0
+fi
+
+
 zipbin="$MODPATH/bin/zip"
 ffmpeg="$MODPATH/bin/ffmpeg"
 cfg_file="/sdcard/cfg"
@@ -172,11 +194,4 @@ mv /data/local/bootanimation.zip "$dest_dir/bootanimation.zip"
 ui_print "**Bootanimation replaced systemlessly**"
 
 # Exiting
-rm -rf $MODPATH/bin
-rm -rf "$TMP_DIR"
-
-# Set permissions for the module
-set_perm_recursive $MODPATH/system 0 0 0755 0644
-ui_print "[*] Done"
-ui_print " "
-
+idk
