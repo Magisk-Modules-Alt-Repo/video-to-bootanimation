@@ -25,6 +25,7 @@ else
     exit 1
 fi
 mkdir -p "/sdcard/temp"
+rm -rf "/sdcard/temp/"*
 cd "/sdcard/temp"
 work_dir="$(pwd)"
 mkdir -p "$work_dir"
