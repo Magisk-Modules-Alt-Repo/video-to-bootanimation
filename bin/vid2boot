@@ -246,10 +246,14 @@ echo " => Removing Temporary Files "
 rm -rf "$TMP_DIR"
 rm -rf "$mod"
 echo -e "${GREEN} => Process Complete${NC}"
+cd "/sdcard"
+rm -rf "/sdcard/tmp"
 exit 0
 else
   echo "Error: Animation folder not found in $TMP_DIR/module."
   sleep 1
+cd "/sdcard"
+rm -rf "/sdcard/tmp"
   echo -e "${BRIGHT_CYAN}Error: Couldnt Create Bootanimation. Please Report${NC}"
   exit 1
 fi
