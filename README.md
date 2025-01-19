@@ -24,6 +24,9 @@ If you delete the `cfg` file or leave it empty, the module will automatically de
 - `boot2vid` to convert a supported bootanimation.zip into a video.
 
 
+## Compatibility 
+- Should work on every ROM which uses a `/system/media/bootanimation.zip` or  `/system/product/media/bootanimation.zip` format for playing bootanimation. 
+
 ## Bugs
 - ~Might not work on MIUI/HyperOS/OxygenOS (never tested)
 - Samsung uses a .QMG format for boot animations, meaning this animation also won't work on your Samsung device.
