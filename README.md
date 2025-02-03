@@ -1,6 +1,10 @@
 ## video-to-bootanimation
 A Magisk/KernelSU Module that sets an MP4 video as the android device's boot animation.
 
+
+[![Telegram](https://img.shields.io/badge/Telegram-blue?style=flat-square&logo=telegram)](https://rhythmcache.t.me)
+![Downloads](https://img.shields.io/github/downloads/Magisk-Modules-Alt-Repo/video-to-bootanimation/total.svg)
+
 ## How to Use
 - Rename your MP4 video to `bootvideo.mp4` and place it in your internal storage (`/storage/emulated/0/`).  
 You can create a file named `cfg` in internal storage and can configure the resolution and FPS of your boot animation by editing that file.
@@ -69,5 +73,3 @@ If you delete the `cfg` file or leave it empty, the module will automatically de
 
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
-[![Telegram](https://img.shields.io/badge/Telegram-Join%20Chat-blue?style=flat-square&logo=telegram)](https://t.me/ximistuffschat)
-![Downloads](https://img.shields.io/github/downloads/Magisk-Modules-Alt-Repo/video-to-bootanimation/total.svg)
