@@ -37,10 +37,10 @@ If you delete the `cfg` file or leave it empty, the module will automatically de
 - Might not work on devices of non-arm64 architecture , to fix you have to put `ffmpeg` and `zip` binary of respective architecture to the module"s bin folder. (you have to find the binary by yourself)
 - Module doesn’t terminate : KernelSU may show the status as "flashing" even though the flashing process is complete. As soon as you see `done` in the output, press the back button.
 
-
-
+<!--
 - found any bugs?
   [tell here](https://t.me/ximistuffschat)
+--->
 
 # Alternative Approach
 - You can use [this script](https://github.com/rhythmcache/Video-to-BootAnimation-Creator-Script/tree/main) to convert videos into a Bootanimation magisk module , which can be flashed directly in magisk. you don't need to create any cfg etc
