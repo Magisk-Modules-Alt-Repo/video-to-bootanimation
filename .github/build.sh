@@ -4,7 +4,7 @@ ARCH="${1:-$ARCH}"
 API_LEVEL="${2:-${API_LEVEL:-29}}"
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPO_ROOT="$(cd "$ROOT_DIR/.." && pwd)"
-OUT_DIR="${ROOT_DIT}/output"
+OUT_DIR="${ROOT_DIR}/output"
 mkdir -p "${OUT_DIR}"
 VALID_ARCHES="aarch64 armv7 x86 x86_64 riscv64"
 [[ -z "$ARCH" || ! " $VALID_ARCHES " =~ " $ARCH " ]] && {
