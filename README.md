@@ -6,7 +6,7 @@ A **Magisk/KernelSU Module** that lets you set an MP4 video as your Android devi
 
 ---
 
-## 📖 How to Use
+##  How to Use
 
 1. **Place your video:**
    - Rename your MP4 video to `bootvideo.mp4`.
@@ -31,7 +31,7 @@ A **Magisk/KernelSU Module** that lets you set an MP4 video as your Android devi
      fps=60
 
      # Include audio from video (on/off)
-     audio=on
+     audio=off
 
      # Target install location
      # (auto | system/media | system/product/media)
@@ -42,7 +42,7 @@ A **Magisk/KernelSU Module** that lets you set an MP4 video as your Android devi
 
 3. **Flash the module in Magisk or KernelSU.**
    - It will automatically convert the video to a bootanimation ZIP during installation.
-   - If `audio=on`, the resulting animation will include sound.
+   - If `audio=on`, the resulting animation will include sound. ( Not all devices support audio in bootanimation )
 
 ---
 
