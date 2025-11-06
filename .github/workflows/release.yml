@@ -50,7 +50,7 @@ jobs:
       - name: Create offline module (bins.tar.xz)
         run: |
           # Compress bins directory with maximum compression
-          tar -cJf bins.tar.xz -C . bins/ --xz -9
+          tar -cf - bins/ | xz -9 > bins.tar.xz
           
           # Create offline module zip
           mkdir -p offline_build
