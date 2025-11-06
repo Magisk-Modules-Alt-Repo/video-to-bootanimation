@@ -1,0 +1,155 @@
+name: Release Magisk Module
+
+on:
+  workflow_dispatch:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  release:
+    name: Create Release
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y jq xz-utils
+
+      - name: Read current version
+        id: current_version
+        run: |
+          CURRENT_VERSION=$(grep "^version=" module.prop | cut -d'=' -f2)
+          CURRENT_VERSION_CODE=$(grep "^versionCode=" module.prop | cut -d'=' -f2)
+          echo "version=$CURRENT_VERSION" >> $GITHUB_OUTPUT
+          echo "versionCode=$CURRENT_VERSION_CODE" >> $GITHUB_OUTPUT
+          
+          # Extract numeric part and increment
+          VERSION_NUM=$(echo $CURRENT_VERSION | sed 's/V//')
+          NEW_VERSION_NUM=$((VERSION_NUM + 1))
+          NEW_VERSION="V${NEW_VERSION_NUM}"
+          NEW_VERSION_CODE=$((CURRENT_VERSION_CODE + 1))
+          
+          echo "new_version=$NEW_VERSION" >> $GITHUB_OUTPUT
+          echo "new_versionCode=$NEW_VERSION_CODE" >> $GITHUB_OUTPUT
+
+      - name: Update module.prop
+        run: |
+          sed -i "s/^version=.*/version=${{ steps.current_version.outputs.new_version }}/" module.prop
+          sed -i "s/^versionCode=.*/versionCode=${{ steps.current_version.outputs.new_versionCode }}/" module.prop
+          
+          echo "Updated module.prop:"
+          cat module.prop
+
+      - name: Create offline module (bins.tar.xz)
+        run: |
+          # Compress bins directory with maximum compression
+          tar -cJf bins.tar.xz -C . bins/ --xz -9
+          
+          # Create offline module zip
+          mkdir -p offline_build
+          cp -r META-INF offline_build/
+          cp module.prop offline_build/
+          cp customize.sh offline_build/
+          cp bins.tar.xz offline_build/
+          
+          cd offline_build
+          zip -9 -r ../video-to-bootanimation-offline-${{ steps.current_version.outputs.new_version }}.zip .
+          cd ..
+          
+          echo "Offline module created"
+          ls -lh video-to-bootanimation-offline-${{ steps.current_version.outputs.new_version }}.zip
+
+      - name: Create online module
+        run: |
+          mkdir -p online_build
+          cp -r META-INF online_build/
+          cp module.prop online_build/
+          echo 'wget -qO- "https://raw.githubusercontent.com/Magisk-Modules-Alt-Repo/video-to-bootanimation/main/customize.sh" | sh' >> online_build/customize.sh
+          
+          chmod +x online_build/customize.sh
+          
+          cd online_build
+          zip -r ../video-to-bootanimation-online-${{ steps.current_version.outputs.new_version }}.zip .
+          cd ..
+          
+          echo "Online module created"
+          ls -lh video-to-bootanimation-online-${{ steps.current_version.outputs.new_version }}.zip
+
+      - name: Update updateJson
+        run: |
+          cat > updateJson << EOF
+          {
+              "versionCode": ${{ steps.current_version.outputs.new_versionCode }},
+              "version": "${{ steps.current_version.outputs.new_version }}",
+              "zipUrl": "https://github.com/Magisk-Modules-Alt-Repo/video-to-bootanimation/releases/download/${{ steps.current_version.outputs.new_version }}/video-to-bootanimation-offline-${{ steps.current_version.outputs.new_version }}.zip",
+              "changelog": "https://raw.githubusercontent.com/Magisk-Modules-Alt-Repo/video-to-bootanimation/main/changelog.md"
+          }
+          EOF
+          
+          echo "Updated updateJson:"
+          cat updateJson
+
+      - name: Commit version updates
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          
+          git add module.prop updateJson
+          git commit -m "Bump version to ${{ steps.current_version.outputs.new_version }} (versionCode: ${{ steps.current_version.outputs.new_versionCode }})"
+          git push
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Create and push tag
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          
+          git tag -a "${{ steps.current_version.outputs.new_version }}" -m "Release ${{ steps.current_version.outputs.new_version }}"
+          git push origin "${{ steps.current_version.outputs.new_version }}"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Create Release
+        id: create_release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: ${{ steps.current_version.outputs.new_version }}
+          name: Release ${{ steps.current_version.outputs.new_version }}
+          body: |
+            ## Video To Bootanimation ${{ steps.current_version.outputs.new_version }}
+            
+            **Version Code:** ${{ steps.current_version.outputs.new_versionCode }}
+            
+            ### Downloads
+            - **Offline Module**: Contains all binaries (~larger size, no internet needed during installation)
+            - **Online Module**: Downloads binaries during installation (~smaller size, requires internet)
+            
+            ### Changelog
+            See [changelog.md](https://raw.githubusercontent.com/Magisk-Modules-Alt-Repo/video-to-bootanimation/main/changelog.md) for details.
+            
+            ### Installation
+            1. Download either the offline or online version
+            2. Flash via Magisk Manager
+            3. Reboot
+          draft: false
+          prerelease: false
+          files: |
+            video-to-bootanimation-offline-${{ steps.current_version.outputs.new_version }}.zip
+            video-to-bootanimation-online-${{ steps.current_version.outputs.new_version }}.zip
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Output Release Info
+        run: |
+          echo " Release ${{ steps.current_version.outputs.new_version }} created successfully!"
+          echo " Offline module: video-to-bootanimation-offline-${{ steps.current_version.outputs.new_version }}.zip"
+          echo " Online module: video-to-bootanimation-online-${{ steps.current_version.outputs.new_version }}.zip"
+          echo " Version Code: ${{ steps.current_version.outputs.new_versionCode }}"
