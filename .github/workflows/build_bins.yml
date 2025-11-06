@@ -40,6 +40,10 @@ jobs:
         with:
           targets: ${{ matrix.target }}
 
+      - name: Install NASM
+        run: sudo apt-get install -y nasm
+    
+
       - name: Build for ${{ matrix.arch }}
         run: |
           cd .github
