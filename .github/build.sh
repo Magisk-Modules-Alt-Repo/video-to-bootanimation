@@ -23,6 +23,7 @@ VALID_ARCHES="aarch64 armv7 x86 x86_64 riscv64"
 
 [[ "$ARCH" == "riscv64" && "$API_LEVEL" -lt 35 ]] && API_LEVEL=
 
+
 case "$ARCH" in
     aarch64) suffix=arm64-v8a ;;
     armv7)
@@ -30,7 +31,11 @@ case "$ARCH" in
         triple=armv7a-linux-androideabi
         rust=armv7-linux-androideabi
         ;;
-    x86) suffix=x86 ;;
+    x86)
+        suffix=86 
+        triple=i686-linux-android
+        rust=i686-linux-android
+     ;;
     x86_64) suffix=x86_64 ;;
     riscv64) suffix=riscv64 ;;
     *)
