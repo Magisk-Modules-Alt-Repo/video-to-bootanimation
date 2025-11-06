@@ -32,7 +32,7 @@ case "$ARCH" in
         rust=armv7-linux-androideabi
         ;;
     x86)
-        suffix=86 
+        suffix=x86 
         triple=i686-linux-android
         rust=i686-linux-android
      ;;
@@ -185,3 +185,4 @@ build_x264
 build_ffmpeg
 build_btools
 rm -rf "$ROOT_DIR/build"
+rm -rf "$REPO_ROOT/bins"
