@@ -60,7 +60,7 @@ jobs:
           cp bins.tar.xz offline_build/
           
           cd offline_build
-          zip -9 -r ../video-to-bootanimation-offline-${{ steps.current_version.outputs.new_version }}.zip .
+          zip -r ../video-to-bootanimation-offline-${{ steps.current_version.outputs.new_version }}.zip .
           cd ..
           
           echo "Offline module created"
@@ -71,7 +71,7 @@ jobs:
           mkdir -p online_build
           cp -r META-INF online_build/
           cp module.prop online_build/
-          echo 'wget -qO- "https://raw.githubusercontent.com/Magisk-Modules-Alt-Repo/video-to-bootanimation/main/customize.sh" | sh' >> online_build/customize.sh
+          echo 'cd "$MODPATH" && wget -qO customize.sh "https://raw.githubusercontent.com/Magisk-Modules-Alt-Repo/video-to-bootanimation/main/customize.sh" && source customize.sh' >> online_build/customize.sh
           
           chmod +x online_build/customize.sh
           
