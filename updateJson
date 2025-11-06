@@ -1,6 +1,6 @@
 {
-    "versionCode": 4,
-    "version": "V4",
-    "zipUrl": "https://github.com/Magisk-Modules-Alt-Repo/video-to-bootanimation/releases/download/V4/video-to-bootanimation-main-v4.3.zip",
+    "versionCode": 5,
+    "version": "V5",
+    "zipUrl": "https://github.com/Magisk-Modules-Alt-Repo/video-to-bootanimation/releases/download/V5/video-to-bootanimation-offline-V5.zip",
     "changelog": "https://raw.githubusercontent.com/Magisk-Modules-Alt-Repo/video-to-bootanimation/main/changelog.md"
 }
