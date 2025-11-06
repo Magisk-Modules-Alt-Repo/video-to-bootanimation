@@ -5,6 +5,7 @@ API_LEVEL="${2:-${API_LEVEL:-29}}"
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPO_ROOT="$(cd "$ROOT_DIR/.." && pwd)"
 OUT_DIR="${ROOT_DIT}/output"
+mkdir -p "${OUT_DIR}"
 VALID_ARCHES="aarch64 armv7 x86 x86_64 riscv64"
 [[ -z "$ARCH" || ! " $VALID_ARCHES " =~ " $ARCH " ]] && {
     echo "Usage: $0 <aarch64|armv7|x86|x86_64|riscv64> [API_LEVEL]"
