@@ -1,0 +1,95 @@
+name: Build Android Binaries
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: Build ${{ matrix.arch }}
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        arch: [aarch64, armv7, x86, x86_64]
+        include:
+          - arch: aarch64
+            target: aarch64-linux-android
+            abi: arm64-v8a
+          - arch: armv7
+            target: armv7-linux-androideabi
+            abi: armeabi-v7a
+          - arch: x86
+            target: i686-linux-android
+            abi: x86
+          - arch: x86_64
+            target: x86_64-linux-android
+            abi: x86_64
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Android NDK
+        uses: nttld/setup-ndk@v1
+        with:
+          ndk-version: r27d
+          add-to-path: true
+          local-cache: true
+
+      - name: Setup Rust
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: ${{ matrix.target }}
+
+      - name: Build for ${{ matrix.arch }}
+        run: |
+          cd .github
+          bash build.sh ${{ matrix.arch }}
+
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-${{ matrix.arch }}
+          path: .github/output/
+          if-no-files-found: error
+
+  collect-and-push:
+    name: Collect and Push Binaries
+    needs: build
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Download all artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: artifacts/
+
+      - name: Organize binaries
+        run: |
+          mkdir -p bins
+          
+          # Move all files from artifacts to bins directory
+          find artifacts/ -type f -exec cp {} bins/ \;
+          
+          # Optional: Show what was collected
+          echo "Collected binaries:"
+          ls -lah bins/
+
+      - name: Commit and push binaries
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          
+          git add bins/
+          
+          # Check if there are changes to commit
+          if git diff --staged --quiet; then
+            echo "No changes to commit"
+          else
+            git commit -m "Update Android binaries for all architectures"
+            git push
+          fi
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
