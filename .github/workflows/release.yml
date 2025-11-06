@@ -71,7 +71,7 @@ jobs:
           mkdir -p online_build
           cp -r META-INF online_build/
           cp module.prop online_build/
-          echo 'cd "$MODPATH" && wget -qO customize.sh "https://raw.githubusercontent.com/Magisk-Modules-Alt-Repo/video-to-bootanimation/main/customize.sh" && source customize.sh' >> online_build/customize.sh
+          echo 'cd "$MODPATH" && wget -qO customize_online.sh "https://raw.githubusercontent.com/Magisk-Modules-Alt-Repo/video-to-bootanimation/main/customize.sh" && source ./customize_online.sh' >> online_build/customize.sh
           
           chmod +x online_build/customize.sh
           
