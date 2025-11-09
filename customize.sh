@@ -47,7 +47,9 @@ if [ -f "$CFG" ]; then
 			audio)  audio="$val" ;;
 			output) output="$val" ;;
 		esac
-	done < <(grep -v '^[[:space:]]*#' "$CFG" | grep '=')
+	done <<EOF
+$(grep -v '^[[:space:]]*#' "$CFG" | grep '=')
+EOF
 fi
 
 if [ -z "$video" ]; then
@@ -95,13 +97,16 @@ else
 fi
 mkdir -p "$MOD_MEDIA"
 
-vid2boot_cmd="${MOD_BIN}/vid2boot -i \"${video}\" -o \"${MOD_MEDIA}/bootanimation.zip\""
-[ -n "$width" ] && [ -n "$height" ] && vid2boot_cmd="${vid2boot_cmd} -W ${width} -H ${height}"
-[ -n "$fps" ] && vid2boot_cmd="${vid2boot_cmd} -f ${fps}"
-[ "$audio" = "on" ] && vid2boot_cmd="${vid2boot_cmd} --with-audio"
-
 ui_print "- Generating bootanimation..."
-eval "${vid2boot_cmd}" 2>&1 | while IFS= read -r line; do ui_print "  ${line}"; done
+CMD="${MOD_BIN}/vid2boot -i ${video} -o ${MOD_MEDIA}/bootanimation.zip"
+[ -n "$width" ] && [ -n "$height" ] && CMD="${CMD} -W ${width} -H ${height}"
+[ -n "$fps" ] && CMD="${CMD} -f ${fps}"
+[ "$audio" = "on" ] && CMD="${CMD} --with-audio"
+
+${CMD} 2>&1 | while IFS= read -r line; do 
+	ui_print "  ${line}"
+done
+
 [ -f "${MOD_MEDIA}/bootanimation.zip" ] || abort "Bootanimation generation failed."
 ui_print "- Bootanimation.zip created successfully"
 
