@@ -1,7 +1,7 @@
 # video-to-bootanimation
 A **Magisk/KernelSU Module** that lets you set an MP4 video as your Android device's **boot animation** — no PC required.
 
-[![Telegram](https://img.shields.io/badge/Telegram-blue?style=flat-square&logo=telegram)](https://rhythmcache.t.me)
+[![Telegram](https://img.shields.io/badge/Telegram-blue?style=flat-square&logo=telegram)](https://tr1ple_fault.t.me)
 ![Downloads](https://img.shields.io/github/downloads/Magisk-Modules-Alt-Repo/video-to-bootanimation/total.svg)
 
 ---
