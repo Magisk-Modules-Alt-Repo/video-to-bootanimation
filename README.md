@@ -95,4 +95,15 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 ---
 
+Support Me
+
+Hii! I'm [rhythmcache](https://github.com/rhythmcache), the developer of [video-to-bootanimation](https://github.com/Magisk-Modules-Alt-Repo/video-to-bootanimation).
+
+If you like this project, consider supporting me by sponsoring the project or buying me a coffee. It really helps me continue working on it!
+
+☕ [Buy me a coffee](https://www.buymeacoffee.com/triple_fault)
+💖 [Sponsor on GitHub](https://github.com/sponsors/rhythmcache)
+
+
+
 Maintained by **@rhythmcache**
